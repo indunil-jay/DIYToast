@@ -1,0 +1,190 @@
+:root {
+  /* --color-red-50: #fef2f2;
+  --color-red-100: #fde7e6;
+  --color-red-300: #f6abab;
+  --color-red-400: #f17b7e;
+  --color-red-500: #e74c55;
+  --color-red-600: #d63848;
+  --color-red-700: #b11f31; */
+
+  --color-red-50: #fef2f2;
+  --color-red-300: #f6abab;
+  --color-red-500: #e74c55;
+
+  --color-blue-50: #ecfaff;
+  --color-blue-100: #d4f2ff;
+  --color-blue-300: #7ddeff;
+  --color-blue-400: #40c8ff;
+  --color-blue-500: #14a7ff;
+  --color-blue-600: #0086ff;
+  --color-blue-700: #006eff;
+
+  --color-green-50: #f0f8f1;
+  --color-green-300: #bcfac8;
+  --color-green-500: #0cdb36;
+  /* --color-green-400: #19f044; */
+  --color-green-600: #03b627;
+  --color-green-700: #03b627;
+
+  --color-yellow-50: #fcfee8;
+  --color-yellow-100: #f8ffc2;
+  --color-yellow-300: #f5ff43;
+  --color-yellow-400: #ffff05;
+  --color-yellow-500: #efe503;
+  --color-yellow-600: #ceb500;
+  --color-yellow-700: #a48304;
+}
+
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  box-sizing: border-box;
+  position: relative;
+  padding: 20px;
+  font-family: "Courier New", Courier, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
+    "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+.toast__container {
+  /* border-left: 10px solid var(--color-icon);
+  background-color: var(--color-background); */
+
+  max-width: 40rem;
+  height: 10rem;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em,
+    rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em,
+    rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
+  border-radius: 0.5rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+  margin: 10px;
+}
+
+.toast__messageBox {
+  width: 90%;
+  height: 90%;
+  display: grid;
+  place-content: center;
+  grid-template-columns: 0.5fr 3fr 0.5fr;
+  gap: 2rem;
+}
+
+.icon__wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform: translate(50%, 50%);
+  z-index: 1;
+}
+
+.icon__overlay {
+  height: 3.4rem;
+  aspect-ratio: 1/1;
+  /* background-color: var(--color-primary); */
+  border-radius: 50%;
+  position: absolute;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+}
+
+.icon__picture {
+  height: 2rem;
+  aspect-ratio: 1/1;
+  /* fill: var(--color-icon); */
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+}
+
+.icon__close {
+  height: 2rem;
+  aspect-ratio: 1/1;
+  fill: rgba(119, 119, 119, 0.5);
+  transform: translate(-50%, -50%);
+  transition: 0.2s al;
+}
+
+.icon__close:hover {
+  transform: translate(-50%, -50%) scale(1.05);
+  fill: rgba(119, 119, 119, 0.8);
+}
+
+.message .title-text {
+  font-weight: 600;
+  font-size: 1.8rem;
+  text-transform: capitalize;
+  letter-spacing: 0.6px;
+  margin-bottom: 2px;
+}
+
+.message .body-text {
+  font-weight: 300;
+  font-size: 1.4rem;
+  letter-spacing: 0.7px;
+}
+
+.toast__container-success {
+  border-left: 10px solid var(--color-green-500);
+  background-color: var(--color-green-50);
+}
+
+.icon__overlay-success {
+  background-color: var(--color-green-300);
+}
+
+.icon__picture-success {
+  fill: var(--color-green-500);
+}
+
+.toast__container-error {
+  border-left: 10px solid var(--color-red-500);
+  background-color: var(--color-red-50);
+}
+
+.icon__overlay-error {
+  background-color: var(--color-red-300);
+}
+
+.icon__picture-error {
+  fill: var(--color-red-500);
+}
+
+.toast__container-info {
+  border-left: 10px solid var(--color-blue-500);
+  background-color: var(--color-blue-50);
+}
+
+.icon__overlay-info {
+  background-color: var(--color-blue-300);
+}
+
+.icon__picture-info {
+  fill: var(--color-blue-500);
+}
+.toast__container-warning {
+  border-left: 10px solid var(--color-yellow-400);
+  background-color: var(--color-yellow-50);
+}
+
+.icon__overlay-warning {
+  background-color: var(--color-yellow-100);
+}
+
+.icon__picture-warning {
+  fill: var(--color-yellow-600);
+}
