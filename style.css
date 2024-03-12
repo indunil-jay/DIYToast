@@ -54,6 +54,24 @@ body {
   font-family: "Courier New", Courier, system-ui, -apple-system,
     BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
     "Open Sans", "Helvetica Neue", sans-serif;
+  position: relative;
+  height: 100vh;
+}
+
+
+
+.toggleBtn{
+  font-size: 2rem;
+  cursor: pointer;
+  border: none;
+  display: inline-block;
+  position: absolute;
+ transform: translate(-50%,-50%);
+ left: 50%;
+ top: 50%;
+ background-color: coral;
+ color: #bcfac8;
+ padding: 10px 18px;
 }
 
 .toast__container {
@@ -72,11 +90,34 @@ body {
   align-items: center;
 
   cursor: pointer;
-  margin: 10px;
+  margin: 16px;
+  position: fixed;
+}
+
+.toast__container[data-position^="top-"]{
+  top: 0;
+}
+.toast__container[data-position^="bottom-"]{
+  bottom: 0;
+}
+.toast__container[data-position$="-left"]{
+ left: 0;
+}
+.toast__container[data-position$="-right"]{
+
+  right: 0;
+}
+.toast__container[data-position$="-center"]{
+left: 50%;
+transform: translate(-50%);
+}
+
+.hidden{
+  display:none
 }
 
 .toast__messageBox {
-  width: 90%;
+  width: 94%;
   height: 90%;
   display: grid;
   place-content: center;
@@ -122,6 +163,10 @@ body {
 .icon__close:hover {
   transform: translate(-50%, -50%) scale(1.05);
   fill: rgba(119, 119, 119, 0.8);
+}
+
+.message {
+  width:100%;
 }
 
 .message .title-text {
