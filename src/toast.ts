@@ -32,6 +32,9 @@ class Toast {
   private showProgress: boolean = false;
   private showRemainSeconds: boolean = false;
 
+  private progressContainer: HTMLElement | null = null;
+  private isPaused: boolean = false;
+
   private defaultOptions: Options = {
     position: "top-right",
     text: "",
@@ -59,7 +62,26 @@ class Toast {
       this.setupRemainSeconds();
     }
 
+    this.progressContainer = this.progressBar ? this.progressBar.parentElement : null;
+    if (this.progressContainer) {
+      this.progressContainer.addEventListener('mouseenter', this.pauseProgress.bind(this));
+      this.progressContainer.addEventListener('mouseleave', this.resumeProgress.bind(this));
+    }
+
     this.close();
+  }
+  private pauseProgress() {
+    if (this.progressInterval) {
+      clearInterval(this.progressInterval);
+      this.isPaused = true;
+    }
+  }
+
+  private resumeProgress() {
+    if (this.isPaused) {
+      this.progressInterval = setInterval(this.updateProgress.bind(this), 100);
+      this.isPaused = false;
+    }
   }
 
   private setupProgress() {

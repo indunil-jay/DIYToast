@@ -15,6 +15,8 @@ class Toast {
         this.progressDuration = 10000;
         this.showProgress = false;
         this.showRemainSeconds = false;
+        this.progressContainer = null;
+        this.isPaused = false;
         this.defaultOptions = {
             position: "top-right",
             text: "",
@@ -35,7 +37,24 @@ class Toast {
         if (this.showRemainSeconds) {
             this.setupRemainSeconds();
         }
+        this.progressContainer = this.progressBar ? this.progressBar.parentElement : null;
+        if (this.progressContainer) {
+            this.progressContainer.addEventListener('mouseenter', this.pauseProgress.bind(this));
+            this.progressContainer.addEventListener('mouseleave', this.resumeProgress.bind(this));
+        }
         this.close();
+    }
+    pauseProgress() {
+        if (this.progressInterval) {
+            clearInterval(this.progressInterval);
+            this.isPaused = true;
+        }
+    }
+    resumeProgress() {
+        if (this.isPaused) {
+            this.progressInterval = setInterval(this.updateProgress.bind(this), 100);
+            this.isPaused = false;
+        }
     }
     setupProgress() {
         if (this.options.autoClose) {
