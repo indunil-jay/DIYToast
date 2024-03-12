@@ -9,6 +9,9 @@ interface Options {
   text?: string;
   type?: string;
   autoClose?: boolean;
+  showProgress?:boolean
+  showRemainSeconds?:boolean;
+  duration?: number
 }
 
 enum SVG {
@@ -21,24 +24,81 @@ enum SVG {
 class Toast {
   private options: Options;
   private toastContainer: HTMLDivElement;
+  private progressBar: HTMLDivElement | null = null;
+  private remainSecondsContainer: HTMLDivElement | null = null;
+  private progressInterval: number | null = null;
+  private progressTime: number = 0;
+  private readonly progressDuration: number = 10000; 
+  private showProgress: boolean = false;
+  private showRemainSeconds: boolean = false;
 
   private defaultOptions: Options = {
     position: "top-right",
     text: "",
     type: "success",
-    autoClose: false
+    autoClose: false,
+    showProgress: false,
+    showRemainSeconds: false,
+
   };
 
-constructor(options: Options) {
-  this.options = { ...this.defaultOptions, ...options };
-  this.toastContainer = createContainer(this.options.position!);
+  constructor(options: Options) {
+    this.options = { ...this.defaultOptions, ...options };
+    this.toastContainer = createContainer(this.options.position!);
 
-  Object.entries(this.options).forEach(([key, value]) => {
-    (this[key as keyof Toast] as any) = value;
-  });
+    Object.entries(this.options).forEach(([key, value]) => {
+      (this[key as keyof Toast] as any) = value;
+    });
 
-  this.close();
-}
+    if (this.showProgress) {
+      this.setupProgress();
+         document.querySelector('.toast__progress-bar')!.classList.add(`toast__progress-bar-${this.options.type}`)
+
+    }
+    if (this.showRemainSeconds) {
+      this.setupRemainSeconds();
+    }
+
+    this.close();
+  }
+
+  private setupProgress() {
+    if (this.options.autoClose) {
+      this.progressTime = 0;
+      this.progressBar = document.createElement("div");
+      this.progressBar.classList.add(`toast__progress-bar`);
+      this.toastContainer.appendChild(this.progressBar);
+      this.progressInterval = setInterval(this.updateProgress.bind(this), 100);
+    }
+  }
+
+  private setupRemainSeconds() {
+    if (this.options.autoClose) {
+      
+      this.remainSecondsContainer = document.createElement("div");
+      this.remainSecondsContainer.classList.add("toast__remain-seconds");
+      this.toastContainer.appendChild(this.remainSecondsContainer);
+      this.remainSecondsContainer.innerText = `${(this.progressDuration / 1000).toFixed(0)}s remaining`;
+    }
+  }
+
+  private updateProgress() {
+    if (this.progressBar) {
+      this.progressTime += 100;
+      const progressWidth = (this.progressTime / this.progressDuration) * 100;
+      this.progressBar.style.width = `${progressWidth}%`;
+
+      if (this.remainSecondsContainer) {
+        const remainSeconds = ((this.progressDuration - this.progressTime) / 1000).toFixed(0);
+        this.remainSecondsContainer.innerText = `${remainSeconds}s remaining`;
+      }
+
+      if (this.progressTime >= this.progressDuration) {
+        this.remove();
+        clearInterval(this.progressInterval!);
+      }
+    }
+  }
 
   set position(value: string) {
     if (this.toastContainer) {
@@ -55,6 +115,8 @@ constructor(options: Options) {
     document.querySelector('.icon__overlay')!.classList.add(`icon__overlay-${value}`);
     document.querySelector('.icon__picture')!.classList.add(`icon__picture-${value}`);
     document.querySelector('.toast__messageBox .message .title-text')!.textContent = value;
+
+ 
   }
 
   set text(value: string) {
@@ -63,7 +125,7 @@ constructor(options: Options) {
 
   set autoClose(value: boolean) {
     if (value) {
-      setTimeout(() => { this.remove(); }, 5000);
+      setTimeout(() => { this.remove(); }, this.progressDuration);
     }
   }
 
@@ -118,6 +180,4 @@ function createContainer(position: string) {
   return container;
 }
 
-const toast = new Toast({ position: "top-right", text: "Hello world!", type: 'success', autoClose: true });
-
-
+const toast = new Toast({ position: "top-right", text: "Hello world!", type: 'error', autoClose: true,showProgress:true,showRemainSeconds:true });

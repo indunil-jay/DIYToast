@@ -8,18 +8,66 @@ var SVG;
 })(SVG || (SVG = {}));
 class Toast {
     constructor(options) {
+        this.progressBar = null;
+        this.remainSecondsContainer = null;
+        this.progressInterval = null;
+        this.progressTime = 0;
+        this.progressDuration = 10000;
+        this.showProgress = false;
+        this.showRemainSeconds = false;
         this.defaultOptions = {
             position: "top-right",
             text: "",
             type: "success",
-            autoClose: false
+            autoClose: false,
+            showProgress: false,
+            showRemainSeconds: false,
         };
         this.options = Object.assign(Object.assign({}, this.defaultOptions), options);
         this.toastContainer = createContainer(this.options.position);
         Object.entries(this.options).forEach(([key, value]) => {
             this[key] = value;
         });
+        if (this.showProgress) {
+            this.setupProgress();
+            document.querySelector('.toast__progress-bar').classList.add(`toast__progress-bar-${this.options.type}`);
+        }
+        if (this.showRemainSeconds) {
+            this.setupRemainSeconds();
+        }
         this.close();
+    }
+    setupProgress() {
+        if (this.options.autoClose) {
+            this.progressTime = 0;
+            this.progressBar = document.createElement("div");
+            this.progressBar.classList.add(`toast__progress-bar`);
+            this.toastContainer.appendChild(this.progressBar);
+            this.progressInterval = setInterval(this.updateProgress.bind(this), 100);
+        }
+    }
+    setupRemainSeconds() {
+        if (this.options.autoClose) {
+            this.remainSecondsContainer = document.createElement("div");
+            this.remainSecondsContainer.classList.add("toast__remain-seconds");
+            this.toastContainer.appendChild(this.remainSecondsContainer);
+            this.remainSecondsContainer.innerText = `${(this.progressDuration / 1000).toFixed(0)}s remaining`;
+        }
+    }
+    updateProgress() {
+        if (this.progressBar) {
+            this.progressTime += 100;
+            const progressWidth = (this.progressTime / this.progressDuration) * 100;
+            this.progressBar.style.width = `${progressWidth}%`;
+            if (this.remainSecondsContainer) {
+                const remainSeconds = ((this.progressDuration - this.progressTime) / 1000).toFixed(0);
+                this.remainSecondsContainer.innerText = `${remainSeconds}s remaining`;
+            }
+            if (this.progressTime >= this.progressDuration) {
+                this.remove();
+                clearInterval(this.progressInterval);
+            }
+        }
     }
     set position(value) {
         if (this.toastContainer) {
@@ -42,7 +90,7 @@ class Toast {
     }
     set autoClose(value) {
         if (value) {
-            setTimeout(() => { this.remove(); }, 5000);
+            setTimeout(() => { this.remove(); }, this.progressDuration);
         }
     }
     remove() {
@@ -95,4 +143,4 @@ function createContainer(position) {
     document.body.append(container);
     return container;
 }
-const toast = new Toast({ position: "top-right", text: "Hello world!", type: 'success', autoClose: true });
+const toast = new Toast({ position: "top-right", text: "Hello world!", type: 'error', autoClose: true, showProgress: true, showRemainSeconds: true });
