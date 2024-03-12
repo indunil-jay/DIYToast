@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "lib": ["DOM", "ES2022", "DOM.Iterable", "Decorators", "Decorators.Legacy"],
+    "module": "ES6",
+    "moduleResolution": "node",
+    "baseUrl": "./",
+    "paths": {
+      "*": ["*", "*.js"]
+    },
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
+  }
+}
